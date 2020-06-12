@@ -21,9 +21,15 @@
 
    $Revision: 1.478 $
    $Date: 2018/06/01 20:36:25 $
+   Update 2020-6-11
  */
 
-#define DCRAW_VERSION "9.28"
+#define DCRAW_VERSION "9.28.dev1"
+
+//three defines added for Visual studio, 9.28.dev1
+#define fseeko _fseeki64
+#define ftello _ftelli64
+#define getc_unlocked _fgetc_nolock
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -10055,17 +10061,28 @@ void CLASS write_ppm_tiff()
   ppm2 = (ushort *) ppm;
   merror (ppm, "write_ppm_tiff()");
   if (output_tiff) {
-    tiff_head (&th, 1);
-    fwrite (&th, sizeof th, 1, ofp);
-    if (oprof)
-      fwrite (oprof, ntohl(oprof[0]), 1, ofp);
-  } else if (colors > 3)
-    fprintf (ofp,
-      "P7\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
-	width, height, colors, (1 << output_bps)-1, cdesc);
+	  tiff_head(&th, 1);
+	  fwrite(&th, sizeof th, 1, ofp);
+	  if (oprof)
+		  fwrite(oprof, ntohl(oprof[0]), 1, ofp);
+  }
+  else if (colors > 3)
+	  fprintf(ofp,
+		  "P7\n# ;EXPTIME=%0.3f\;TIMESTAMP=%d\;ISOSPEED=%d\;APERTURE=%0.1f\;FOCALLEN=%0.1f\;MAKE=%s\;MODEL=%s;\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
+		  shutter, (int)timestamp, (int)iso_speed,aperture, focal_len, make, model,                                                       //added machine readable shutter time and other info in the PGM comments. Keywords simular as FITS standard. rev 9.28dev1 
+		  width, height, colors, (1 << output_bps) - 1, cdesc);
+
+  //  fprintf(ofp,
+  //	  "P7\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
+  //	  width, height, colors, (1 << output_bps) - 1, cdesc);
+
   else
-    fprintf (ofp, "P%d\n%d %d\n%d\n",
-	colors/2+5, width, height, (1 << output_bps)-1);
+	  fprintf(ofp, "P%d\n# ;EXPTIME=%0.3f\;TIMESTAMP=%d\;ISOSPEED=%d\;APERTURE=%0.1f\;FOCALLEN=%0.1f\;MAKE=%s\;MODEL=%s;\n%d %d\n%d\n",    //added machine readable shutter time and other info in the PGM comments. Keywords similar as FITS standard. rev 9.28dev1 
+	       colors/2+5, shutter, (int)timestamp, (int)iso_speed,aperture,focal_len,make,model,width, height, (1 << output_bps)-1);
+
+//  fprintf(ofp, "P%d\n%d %d\n%d\n",         
+//	  colors / 2 + 5, width, height, (1 << output_bps) - 1);
+
   soff  = flip_index (0, 0);
   cstep = flip_index (0, 1) - soff;
   rstep = flip_index (1, 0) - flip_index (0, width);
