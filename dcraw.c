@@ -21,10 +21,10 @@
 
    $Revision: 1.478 $
    $Date: 2018/06/01 20:36:25 $
-   Update 2020-6-11
+   Updated 2020-6-13
  */
 
-#define DCRAW_VERSION "9.28.dev1"
+#define DCRAW_VERSION "9.28.dev2"
 
 //three defines added for Visual studio, 9.28.dev1
 #define fseeko _fseeki64
@@ -10068,8 +10068,8 @@ void CLASS write_ppm_tiff()
   }
   else if (colors > 3)
 	  fprintf(ofp,
-		  "P7\n# ;EXPTIME=%0.3f\;TIMESTAMP=%d\;ISOSPEED=%d\;APERTURE=%0.1f\;FOCALLEN=%0.1f\;MAKE=%s\;MODEL=%s;\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
-		  shutter, (int)timestamp, (int)iso_speed,aperture, focal_len, make, model,                                                       //added machine readable shutter time and other info in the PGM comments. Keywords simular as FITS standard. rev 9.28dev1 
+		  "P7\n# EXPTIME=%0.3f\n# TIMESTAMP=%d\n# ISOSPEED=%d\n# APERTURE=%0.1f\n# FOCALLEN=%0.1f\n# MAKE=%s\n# MODEL=%s\nWIDTH %d\nHEIGHT %d\nDEPTH %d\nMAXVAL %d\nTUPLTYPE %s\nENDHDR\n",
+		  shutter, (int)timestamp, (int)iso_speed,aperture, focal_len, make, model,                                                       //added machine readable shutter time and other info in the PGM comments. Keywords simular as FITS standard. rev 9.28dev2 
 		  width, height, colors, (1 << output_bps) - 1, cdesc);
 
   //  fprintf(ofp,
@@ -10077,8 +10077,10 @@ void CLASS write_ppm_tiff()
   //	  width, height, colors, (1 << output_bps) - 1, cdesc);
 
   else
-	  fprintf(ofp, "P%d\n# ;EXPTIME=%0.3f\;TIMESTAMP=%d\;ISOSPEED=%d\;APERTURE=%0.1f\;FOCALLEN=%0.1f\;MAKE=%s\;MODEL=%s;\n%d %d\n%d\n",    //added machine readable shutter time and other info in the PGM comments. Keywords similar as FITS standard. rev 9.28dev1 
-	       colors/2+5, shutter, (int)timestamp, (int)iso_speed,aperture,focal_len,make,model,width, height, (1 << output_bps)-1);
+	  //fprintf(ofp, "P%d\n# ;EXPTIME=%0.3f\;TIMESTAMP=%d\;ISOSPEED=%d\;APERTURE=%0.1f\;FOCALLEN=%0.1f\;MAKE=%s\;MODEL=%s;\n%d %d\n%d\n",    //added machine readable shutter time and other info in the PGM comments. Keywords similar as FITS standard. rev 9.28dev2 
+	//	  colors / 2 + 5, shutter, (int)timestamp, (int)iso_speed, aperture, focal_len, make, model, width, height, (1 << output_bps) - 1);
+  fprintf(ofp, "P%d\n# EXPTIME=%0.3f\n# TIMESTAMP=%d\n# ISOSPEED=%d\n# APERTURE=%0.1f\n# FOCALLEN=%0.1f\n# MAKE=%s\n# MODEL=%s\n%d %d\n%d\n",    //added machine readable shutter time and other info in the PGM comments. Keywords similar as FITS standard. rev 9.28dev2 
+	  colors / 2 + 5, shutter, (int)timestamp, (int)iso_speed, aperture, focal_len, make, model, width, height, (1 << output_bps) - 1);
 
 //  fprintf(ofp, "P%d\n%d %d\n%d\n",         
 //	  colors / 2 + 5, width, height, (1 << output_bps) - 1);
