@@ -21,15 +21,19 @@
 
    $Revision: 1.478 $
    $Date: 2018/06/01 20:36:25 $
-   Updated 2020-6-13
+   Updated 2020-6-14
  */
 
-#define DCRAW_VERSION "9.28.dev2"
+#define DCRAW_VERSION "9.28.dev3"
 
-//three defines added for Visual studio, 9.28.dev1
-#define fseeko _fseeki64
-#define ftello _ftelli64
-#define getc_unlocked _fgetc_nolock
+//three defines added for Windows Visual studio
+#ifdef _WIN32
+ #define fseeko _fseeki64
+ #define ftello _ftelli64
+ #define getc_unlocked _fgetc_nolock
+#else 
+#endif
+
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
