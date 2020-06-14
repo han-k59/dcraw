@@ -26,11 +26,6 @@
 
 #define DCRAW_VERSION "9.28.dev2"
 
-//three defines added for Visual studio, 9.28.dev1
-#define fseeko _fseeki64
-#define ftello _ftelli64
-#define getc_unlocked _fgetc_nolock
-
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -47,6 +42,13 @@
 #include <string.h>
 #include <time.h>
 #include <sys/types.h>
+
+//three defines added for Windows Visual studio
+#ifdef _WIN32
+#define fseeko _fseeki64
+#define ftello _ftelli64
+#define getc_unlocked _fgetc_nolock
+#endif
 
 #if defined(DJGPP) || defined(__MINGW32__)
 #define fseeko fseek
@@ -1006,10 +1008,13 @@ void CLASS canon_sraw_load_raw()
   for (row=0; row < height; row++, ip+=width) {
     if (row & (jh.sraw >> 1))
       for (col=0; col < width; col+=2)
-	for (c=1; c < 3; c++)
-	  if (row == height-1)
-	       ip[col][c] =  ip[col-width][c];
-	  else ip[col][c] = (ip[col-width][c] + ip[col+width][c] + 1) >> 1;
+	for (c=1; c < 3; c++) {
+	  if (row == height-1) {
+        ip[col][c] =  ip[col-width][c];
+      } else {
+        ip[col][c] = (ip[col-width][c] + ip[col+width][c] + 1) >> 1;
+      }
+    }
     for (col=1; col < width; col+=2)
       for (c=1; c < 3; c++)
 	if (col == width-1)
@@ -1033,7 +1038,7 @@ void CLASS canon_sraw_load_raw()
       pix[2] = rp[0] + rp[1];
       pix[1] = rp[0] + ((-778*rp[1] - (rp[2] << 11)) >> 12);
     }
-    FORC3 rp[c] = CLIP(pix[c] * sraw_mul[c] >> 10);
+    FORC3 rp[c] = (short)CLIP(pix[c] * sraw_mul[c] >> 10);
   }
   ljpeg_end (&jh);
   maximum = 0x3fff;
@@ -10468,7 +10473,7 @@ next:
     }
     if (mix_green)
       for (colors=3, i=0; i < height*width; i++)
-	image[i][1] = (image[i][1] + image[i][3]) >> 1;
+	    image[i][1] = (image[i][1] + image[i][3]) >> 1;
     if (!is_foveon && colors == 3) median_filter();
     if (!is_foveon && highlight == 2) blend_highlights();
     if (!is_foveon && highlight > 2) recover_highlights();
@@ -10484,7 +10489,8 @@ thumbnail:
     else if (output_tiff && write_fun == &CLASS write_ppm_tiff)
       write_ext = ".tiff";
     else
-      write_ext = ".pgm\0.ppm\0.ppm\0.pam" + colors*5-5;
+//       write_ext = ".pgm\0.ppm\0.ppm\0.pam" + colors*5-5;
+      write_ext = &".pgm\0.ppm\0.ppm\0.pam"[colors*5-5];
     ofname = (char *) malloc (strlen(ifname) + 64);
     merror (ofname, "main()");
     if (write_to_stdout)
