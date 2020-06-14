@@ -21,10 +21,10 @@
 
    $Revision: 1.478 $
    $Date: 2018/06/01 20:36:25 $
-   Updated 2020-6-13
+   Updated 2020-6-14
  */
 
-#define DCRAW_VERSION "9.28.dev2"
+#define DCRAW_VERSION "9.28.dev3"
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
