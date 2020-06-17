@@ -4,8 +4,8 @@
 LANGUAGE 0x09,0x01
 
 1 VERSIONINFO
-  FILEVERSION 9,2,7,0
-  PRODUCTVERSION 1,4,7,7
+  FILEVERSION 9,2,8,3
+  PRODUCTVERSION 1,4,7,8
   FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
   FILEFLAGS VS_FF_DEBUG
@@ -22,15 +22,15 @@ BEGIN
 	BEGIN
 	    // Required:	    
 	    VALUE "CompanyName", "www.cybercom.net/~dcoffin/dcraw/\0"
-	    VALUE "FileDescription", "This is a command-line ANSI C program to convert raw photos from any digital camera on any computer running any operating system.\0"
-	    VALUE "FileVersion", "9.27\0"
+	    VALUE "FileDescription", "Command-line program to convert raw photos. Special version for ASTAP. Adds metadata to PPM output file\0"
+	    VALUE "FileVersion", "9.28.3\0"
 	    VALUE "InternalName", "dcraw\0"
 	    VALUE "OriginalFilename", "dcraw.exe\0"
 	    VALUE "ProductName", "dcraw\0"
-	    VALUE "ProductVersion", "9.27 Revision: 1.477\0"
+	    VALUE "ProductVersion", "9.28.3 Revision: 1.478.1\0"
 	    // Optional:
-	    VALUE "Comments", "dcraw windows native 32 bits build by Olivier Levon\0" //, LCMS / JPEG / Jasper / ImageMagick support included
-	    VALUE "LegalCopyright", "Copyright © 1997-2016 by Dave Coffin, dcoffin a cybercom o net.\0"
+	    VALUE "Comments", "dcraw, build with no dependencies and modification added for the ASTAP program to write meta data to comment section of PPM output file."
+	    VALUE "LegalCopyright", "Copyright © 1997-2018 by Dave Coffin, dcoffin a cybercom o net.\0"
 	    VALUE "LegalTrademarks", "\0"
 	    //VALUE "PrivateBuild", "\0"
 	    //VALUE "SpecialBuild", "\0"

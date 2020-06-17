@@ -43,11 +43,12 @@
 #include <time.h>
 #include <sys/types.h>
 
-//three defines added for Windows Visual studio
+//Four defines added for Windows Visual Studio
 #ifdef _WIN32
 #define fseeko _fseeki64
 #define ftello _ftelli64
 #define getc_unlocked _fgetc_nolock
+#define NODEPS  // compile with no dependencies like japer jpeg2000
 #endif
 
 #if defined(DJGPP) || defined(__MINGW32__)
